@@ -39,6 +39,7 @@ class Api {
         return '333333';
       case ItemCategory.dietSalad:
         return '';
+        default:return '';
     }
   }
 }
