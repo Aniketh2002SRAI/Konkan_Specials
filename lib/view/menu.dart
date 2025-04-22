@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:konkanspecials/components/appbar/ks_app_bar.dart';
 import 'package:konkanspecials/components/menu/ks_item_block.dart';
+import 'package:konkanspecials/constants/constants.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 import 'package:konkanspecials/view/homepage.dart';
 import 'package:konkanspecials/viewmodel/item_adding_view_model.dart';
@@ -15,8 +16,12 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBackgroundColor,
       appBar: ksAppBar(
-        itemCategory: itemCategory,
+        titleWidget: Text(
+          itemCategory.emoji + '  ' + itemCategory.name,
+          style: appBarTitleStyle,
+        ),
         leadingIcon: Icons.arrow_back,
         onLeadingIconTap: () {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

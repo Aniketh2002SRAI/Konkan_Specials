@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:konkanspecials/components/buttons/ks_app_button.dart';
+import 'package:konkanspecials/components/buttons/ks_order_Add_decrement_button.dart';
 import 'package:konkanspecials/components/menu/cached_image.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 import 'package:konkanspecials/viewmodel/item_adding_view_model.dart';

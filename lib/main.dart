@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:konkanspecials/view/landing_screen.dart';
+import 'package:konkanspecials/viewmodel/account_view_model.dart';
 import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.dart';
 import 'package:konkanspecials/viewmodel/item_adding_view_model.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => ItemAddingViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AccountViewModel(),
         ),
       ],
       child: const MyApp(),

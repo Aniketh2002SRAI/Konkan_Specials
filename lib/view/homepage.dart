@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:konkanspecials/api/api.dart';
 import 'package:konkanspecials/components/home_page/category_block.dart';
 import 'package:konkanspecials/components/home_page/description_widget.dart';
+import 'package:konkanspecials/constants/constants.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 import 'package:konkanspecials/utility/app_utility.dart';
 import 'package:konkanspecials/view/menu.dart';
@@ -19,10 +20,10 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: appBackgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: Colors.grey[50],
+        backgroundColor: appBackgroundColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -78,7 +79,7 @@ class _HomepageState extends State<Homepage> {
           itemCategory: ItemCategory.values[index],
           onTap: () async {
             showCircularProgressIndicator(context: context);
-            final List<ItemData> items = await Api.instance
+            final List<ItemData>? items = await Api.instance
                 .getItems(itemCategory: ItemCategory.values[index]);
             if (items != null) {
               hideProgressIndicator(context: context);
@@ -86,6 +87,8 @@ class _HomepageState extends State<Homepage> {
                   .navigateToMenu(context: context, items: items);
             } else {
               hideProgressIndicator(context: context);
+              showErrorSnackBar(
+                  context: context, message: Api.instance.errorMessage);
             }
           },
         ),

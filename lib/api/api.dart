@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 import 'package:konkanspecials/view/homepage.dart';
 
@@ -8,25 +10,36 @@ class Api {
 
   Api._();
 
+  String errorMessage = 'Something went wrong';
+
   final String baseUrl =
       'https://0s9hxdf9ud.execute-api.ap-south-1.amazonaws.com/dev/';
 
-  Future<List<ItemData>> getItems({required ItemCategory itemCategory}) async {
-    final response = await http.get(Uri.parse(
-        '${Api.instance.baseUrl}/api/items?category_id=${getCategoryId(itemCategoty: itemCategory)}'));
+  Future<List<ItemData>?> getItems({required ItemCategory itemCategory}) async {
+    try {
+      final response = await http.get(Uri.parse(
+          '${Api.instance.baseUrl}/api/items?category_id=${getCategoryId(itemCategoty: itemCategory)}'));
 
-    List<ItemData> items = [];
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
+        final List<ItemData> items =
+            (jsonData as List).map((item) => ItemData.fromJson(item)).toList();
+        ;
 
-      final List<ItemData> items =
-          (jsonData as List).map((item) => ItemData.fromJson(item)).toList();
-      ;
-
-      return items;
+        return items;
+      } else {
+        getErrorMessage(response: response);
+        return null;
+      }
+    } on SocketException catch (e) {
+      getErrorMessage(exceptionMessage: "You're offline");
+      return null;
+    } catch (e) {
+    
+      getErrorMessage(exceptionMessage: 'Something went wrong');
+      return null;
     }
-    return [];
   }
 
   String getCategoryId({required ItemCategory itemCategoty}) {
@@ -39,7 +52,20 @@ class Api {
         return '333333';
       case ItemCategory.dietSalad:
         return '';
-        default:return '';
+      default:
+        return '';
+    }
+  }
+
+  void getErrorMessage({Response? response, String? exceptionMessage}) {
+    if (response != null) {
+      if (response.statusCode >= 400 && response.statusCode <= 451) {
+        errorMessage = 'Something went wrong';
+      } else if (response.statusCode >= 500 && response.statusCode <= 599) {
+        errorMessage = 'Server error,please try again later';
+      }
+    } else {
+      errorMessage = exceptionMessage!;
     }
   }
 }
