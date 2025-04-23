@@ -4,10 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:konkanspecials/api/api.dart';
 import 'package:konkanspecials/components/home_page/category_block.dart';
 import 'package:konkanspecials/components/home_page/description_widget.dart';
+import 'package:konkanspecials/components/navigation_bar/home_bottom_navigation_bar.dart';
 import 'package:konkanspecials/constants/constants.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
+import 'package:konkanspecials/model/location_model.dart/location_model.dart';
+import 'package:konkanspecials/model/location_model.dart/location_service.dart';
 import 'package:konkanspecials/utility/app_utility.dart';
+import 'package:konkanspecials/view/account.dart';
+import 'package:konkanspecials/view/landing_screen.dart';
 import 'package:konkanspecials/view/menu.dart';
+import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.dart';
+import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -27,18 +34,45 @@ class _HomepageState extends State<Homepage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'Location',
-              style: GoogleFonts.nunito(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
+            Consumer<LocationService>(
+              builder: (context, locationService, child) {
+                final locationModel = locationService.locationModel;
+                return InkWell(
+                  onTap: () => locationService.refreshLocation(),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        _getLocationText(locationModel),
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             Spacer(),
-            Icon(
-              Icons.person_2_rounded,
-              color: Colors.black,
+            InkWell(
+              onTap: () {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Provider.of<HomeBottomNavigationBarViewModel>(context,
+                          listen: false)
+                      .setSelectedItem(HomeBottomNavigationBarItem.profile);
+                });
+              },
+              child: Icon(
+                Icons.person_2_rounded,
+                color: Colors.black,
+              ),
             )
           ],
         ),
@@ -58,6 +92,24 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
+
+  String _getLocationText(LocationModel? locationModel) {
+    if (locationModel == null) return 'Loading...';
+
+    switch (locationModel.status) {
+      case LocationStatus.granted:
+        return locationModel.locationString ?? 'Getting location...';
+      case LocationStatus.disabled:
+        return 'Enable location';
+      case LocationStatus.denied:
+      case LocationStatus.deniedForever:
+        return 'Location access needed';
+      case LocationStatus.error:
+        return 'Location error';
+      case LocationStatus.initial:
+        return 'Getting location...';
+    }
   }
 
   Widget _categoryBlockWidget() {

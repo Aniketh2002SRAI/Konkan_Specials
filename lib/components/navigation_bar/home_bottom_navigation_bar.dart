@@ -8,8 +8,10 @@ import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.d
 import 'package:provider/provider.dart';
 
 class HomeBottomNavigationBar extends StatelessWidget {
+  final HomeBottomNavigationBarItem? homeBottomNavigationBarItem;
   const HomeBottomNavigationBar({
     super.key,
+    this.homeBottomNavigationBarItem,
   });
 
   @override

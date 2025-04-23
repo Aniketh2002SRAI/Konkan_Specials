@@ -4,16 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.dart';
 
 class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
+  const LandingScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeBottomNavigationBarViewModel>(
-        builder: (context, homeBottomNavigationBarViewModel, child) {
-      return Scaffold(
-        bottomNavigationBar: HomeBottomNavigationBar(),
-        body: homeBottomNavigationBarViewModel.selectedItem.screen,
-      );
-    });
+      builder: (context, homeBottomNavigationBarViewModel, child) {
+        return Scaffold(
+          bottomNavigationBar: HomeBottomNavigationBar(),
+          body: homeBottomNavigationBarViewModel.selectedItem.screen,
+        );
+      },
+    );
   }
 }

@@ -22,7 +22,7 @@ class Menu extends StatelessWidget {
           itemCategory.emoji + '  ' + itemCategory.name,
           style: appBarTitleStyle,
         ),
-        leadingIcon: Icons.arrow_back,
+        leadingIcon: Icons.chevron_left,
         onLeadingIconTap: () {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             final itemAddingViewModel =
