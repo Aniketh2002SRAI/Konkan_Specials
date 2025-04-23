@@ -18,6 +18,7 @@ class ksAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('leadingIcon: $leadingIcon');
     return AppBar(
       scrolledUnderElevation: 0,
       backgroundColor: Colors.white,

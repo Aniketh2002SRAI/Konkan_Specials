@@ -10,37 +10,72 @@ import 'package:konkanspecials/viewmodel/account_view_model.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatelessWidget {
-  Account({super.key});
-  LoginType loginType = LoginType.inital;
+  const Account({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appBackgroundColor,
-      appBar: ksAppBar(
-        titleWidget: Text(
-          'Account',
-          style: appBarTitleStyle,
+    return Consumer<AccountViewModel>(
+        builder: (context, accountViewModel, child) {
+      return Scaffold(
+        backgroundColor: appBackgroundColor,
+        appBar: ksAppBar(
+          titleWidget: Text('Account', style: appBarTitleStyle),
+          leadingIcon: _getLeadingIcon(loginType: accountViewModel.loginType),
+          onLeadingIconTap: () {
+            _getOnLeadingIconTap(
+                loginType: accountViewModel.loginType,
+                accountViewModel: accountViewModel);
+          },
         ),
-      ),
-      body: SafeArea(
-        child: _loginSignUpScreenBody(),
-      ),
-    );
+        body: SafeArea(
+          child: _loginSignUpScreenBody(),
+        ),
+      );
+    });
+  }
+
+  void _getOnLeadingIconTap(
+      {required LoginType loginType,
+      required AccountViewModel accountViewModel}) {
+    switch (loginType) {
+      case LoginType.initial:
+      case LoginType.user:
+        () {};
+        break;
+      case LoginType.login:
+      case LoginType.signup:
+        accountViewModel.setLoginType(LoginType.initial);
+        break;
+    }
+  }
+
+  IconData? _getLeadingIcon({required LoginType loginType}) {
+    switch (loginType) {
+      case LoginType.initial:
+      case LoginType.user:
+        return null;
+      case LoginType.login:
+      case LoginType.signup:
+        return Icons.chevron_left;
+      default:
+        return null;
+    }
   }
 
   Widget _loginSignUpScreenBody() {
     return Consumer<AccountViewModel>(
-        builder: (context, accountViewModel, child) {
-      return Column(
-        children: [..._getBody(accountViewModel: accountViewModel)],
-      );
-    });
+      builder: (context, accountViewModel, child) {
+        return Column(
+          children: [..._getBody(accountViewModel: accountViewModel)],
+        );
+      },
+    );
   }
 
   List<Widget> _getBody({required AccountViewModel accountViewModel}) {
     return [
       _imageWidget(),
-      _descriptionWidget(),
+      _descriptionWidget(accountViewModel: accountViewModel),
       SizedBox(height: ScreenUtil().setHeight(10.0)),
       _getLayout(accountViewModel: accountViewModel)
     ];
@@ -48,7 +83,7 @@ class Account extends StatelessWidget {
 
   Widget _getLayout({required AccountViewModel accountViewModel}) {
     switch (accountViewModel.loginType) {
-      case LoginType.inital:
+      case LoginType.initial:
         return InitialAccountLayout(accountViewModel: accountViewModel);
       case LoginType.login:
         return LoginSignUpWidget(loginType: LoginType.login);
@@ -65,25 +100,26 @@ class Account extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
-            image:
-                AssetImage('images/background_images/konkan_background.jpeg'),
-            fit: BoxFit.fill),
+          image: AssetImage('images/background_images/konkan_background.jpeg'),
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
 
-  Widget _descriptionWidget() {
+  Widget _descriptionWidget({required AccountViewModel accountViewModel}) {
     return Column(
       children: [
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(15.0),
-                top: ScreenUtil().setHeight(8.0)),
+              left: ScreenUtil().setWidth(15.0),
+              top: ScreenUtil().setHeight(8.0),
+            ),
             child: Container(
               child: Text(
-                'Login/Create Account to manage orders',
+                _getText(accountViewModel: accountViewModel),
                 style: GoogleFonts.nunito(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
@@ -96,6 +132,19 @@ class Account extends StatelessWidget {
       ],
     );
   }
+
+  String _getText({required AccountViewModel accountViewModel}) {
+    switch (accountViewModel.loginType) {
+      case LoginType.initial:
+        return 'Login/Create Account to manage orders';
+      case LoginType.login:
+        return 'Login to manage orders';
+      case LoginType.signup:
+        return 'Signup to manage orders';
+      default:
+        return '';
+    }
+  }
 }
 
-enum LoginType { inital, login, signup, user }
+enum LoginType { initial, login, signup, user }
