@@ -10,4 +10,11 @@ class AddToCartModel {
   String toString() {
     return 'AddToCartModel(itemData: $itemData, quantity: $quantity)';
   }
+
+  factory AddToCartModel.fromJson(Map<String, dynamic> json) {
+    return AddToCartModel(
+      itemData: ItemData.fromJson(json['itemData']),
+      quantity: json['quantity'],
+    );
+  }
 }

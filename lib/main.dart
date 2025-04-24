@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:konkanspecials/model/location_model.dart/location_service.dart';
+import 'package:konkanspecials/model/location_model/location_service.dart';
 import 'package:konkanspecials/view/landing_screen.dart';
 import 'package:konkanspecials/viewmodel/account_view_model.dart';
 import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.dart';
@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-  LocationService.instance.getLocation();
+    LocationService.instance.getLocation();
   }
 
   // This widget is the root of your application.

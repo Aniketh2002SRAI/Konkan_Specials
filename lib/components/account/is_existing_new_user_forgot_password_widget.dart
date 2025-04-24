@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:konkanspecials/view/account.dart';
 import 'package:konkanspecials/viewmodel/account_view_model.dart';
 
-class IsExistingNewUserWidget extends StatelessWidget {
+class IsExistingNewUserForgotPasswordWidgetWidget extends StatelessWidget {
+  final bool? isForgotPassword;
   final LoginType loginType;
   final AccountViewModel accountViewModel;
 
-  const IsExistingNewUserWidget({
+  const IsExistingNewUserForgotPasswordWidgetWidget({
     super.key,
+    this.isForgotPassword = false,
     required this.loginType,
     required this.accountViewModel,
   });
@@ -20,11 +22,20 @@ class IsExistingNewUserWidget extends StatelessWidget {
   }
 
   Widget _isExistingNewUserWidget(LoginType loginType) {
+    if (isForgotPassword == true) {
+      return _buildRichText(
+        prompt: 'Forgot Password? ',
+        actionText: 'Click Here',
+        onTap: () {
+          accountViewModel.setLoginType(LoginType.forgotPassword);
+        },
+      );
+    }
     switch (loginType) {
       case LoginType.login:
         return _buildRichText(
-          prompt: 'New User? ',
-          actionText: 'Sign Up',
+          prompt: isForgotPassword == true ? 'Forgot Password? ' : 'New User? ',
+          actionText: isForgotPassword == true ? 'Click Here' : 'Sign Up',
           onTap: () {
             accountViewModel.setLoginType(LoginType.signup);
           },
@@ -37,6 +48,7 @@ class IsExistingNewUserWidget extends StatelessWidget {
             accountViewModel.setLoginType(LoginType.login);
           },
         );
+
       default:
         return const SizedBox.shrink();
     }

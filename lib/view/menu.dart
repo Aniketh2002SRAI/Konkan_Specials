@@ -2,43 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:konkanspecials/components/appbar/ks_app_bar.dart';
 import 'package:konkanspecials/components/menu/ks_item_block.dart';
+import 'package:konkanspecials/components/uitilty/cart_description_navigation_widget.dart';
+import 'package:konkanspecials/components/uitilty/cart_icon_widget.dart';
 import 'package:konkanspecials/constants/constants.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 import 'package:konkanspecials/view/homepage.dart';
-import 'package:konkanspecials/viewmodel/item_adding_view_model.dart';
-import 'package:provider/provider.dart';
+
 
 class Menu extends StatelessWidget {
   final ItemCategory itemCategory;
   final List<ItemData> items;
-  const Menu({super.key, required this.itemCategory, required this.items});
+  final bool isVeg;
+  const Menu(
+      {super.key,
+      required this.itemCategory,
+      required this.items,
+      required this.isVeg});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appBackgroundColor,
       appBar: ksAppBar(
-        titleWidget: Text(
-          itemCategory.emoji + '  ' + itemCategory.name,
-          style: appBarTitleStyle,
+        leadingIcon: null,
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _backButton(context: context),
+            _title(),
+            CartIconWidget(),
+          ],
         ),
-        leadingIcon: Icons.chevron_left,
-        onLeadingIconTap: () {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            final itemAddingViewModel =
-                Provider.of<ItemAddingViewModel>(context, listen: false);
-            itemAddingViewModel.clearCart();
-            Navigator.pop(context);
-          });
-        },
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          _categoryImage(),
-          _menuItemsSection(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _categoryImage(),
+              _menuItemsSection(isVeg: isVeg),
+            ],
+          ),
+          CartDescriptionNavigationWidget(),
         ],
       ),
+    );
+  }
+
+  InkWell _backButton({required BuildContext context}) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Icon(
+        Icons.chevron_left,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Text _title() {
+    return Text(
+      itemCategory.emoji + '  ' + itemCategory.name,
+      style: appBarTitleStyle,
+      textAlign: TextAlign.center,
     );
   }
 
@@ -67,20 +94,22 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget _menuItemsSection() {
+  Widget _menuItemsSection({required bool isVeg}) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(
-            top: ScreenUtil().setHeight(15),
-            left: ScreenUtil().setWidth(15),
-            right: ScreenUtil().setWidth(15)),
+          top: ScreenUtil().setHeight(15),
+        ),
         child: ListView.builder(
           shrinkWrap: true,
+          padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(65)),
+          physics: AlwaysScrollableScrollPhysics(),
           itemCount: items.length,
           itemBuilder: (context, index) => Padding(
             padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
             child: KsItemBlock(
               itemData: items[index],
+              isVeg: isVeg,
             ),
           ),
         ),

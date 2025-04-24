@@ -4,16 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:konkanspecials/api/api.dart';
 import 'package:konkanspecials/components/home_page/category_block.dart';
 import 'package:konkanspecials/components/home_page/description_widget.dart';
-import 'package:konkanspecials/components/navigation_bar/home_bottom_navigation_bar.dart';
+import 'package:konkanspecials/components/uitilty/cart_description_navigation_widget.dart';
+import 'package:konkanspecials/components/uitilty/cart_icon_widget.dart';
 import 'package:konkanspecials/constants/constants.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
-import 'package:konkanspecials/model/location_model.dart/location_model.dart';
-import 'package:konkanspecials/model/location_model.dart/location_service.dart';
+import 'package:konkanspecials/model/location_model/location_model.dart';
+import 'package:konkanspecials/model/location_model/location_service.dart';
 import 'package:konkanspecials/utility/app_utility.dart';
-import 'package:konkanspecials/view/account.dart';
-import 'package:konkanspecials/view/landing_screen.dart';
 import 'package:konkanspecials/view/menu.dart';
-import 'package:konkanspecials/viewmodel/home_bottom_navigation_bar_view_model.dart';
 import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
@@ -27,70 +25,60 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appBackgroundColor,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
         backgroundColor: appBackgroundColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Consumer<LocationService>(
-              builder: (context, locationService, child) {
-                final locationModel = locationService.locationModel;
-                return InkWell(
-                  onTap: () => locationService.refreshLocation(),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        _getLocationText(locationModel),
-                        style: GoogleFonts.nunito(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Provider.of<HomeBottomNavigationBarViewModel>(context,
-                          listen: false)
-                      .setSelectedItem(HomeBottomNavigationBarItem.profile);
-                });
-              },
-              child: Icon(
-                Icons.person_2_rounded,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.only(top: ScreenUtil().setHeight(5.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _categoryBlockWidget(),
-              DescriptionWidget(),
-            ],
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: appBackgroundColor,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [_locationWidget(), Spacer(), CartIconWidget()],
           ),
         ),
-      ),
+        body: Stack(children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(5.0)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _categoryBlockWidget(),
+                  DescriptionWidget(),
+                ],
+              ),
+            ),
+          ),
+          CartDescriptionNavigationWidget()
+        ]));
+  }
+
+  Widget _locationWidget() {
+    return Consumer<LocationService>(
+      builder: (context, locationService, child) {
+        final locationModel = locationService.locationModel;
+        return InkWell(
+          onTap: () => locationService.refreshLocation(),
+          child: Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                size: 20,
+                color: Colors.black,
+              ),
+              SizedBox(width: 4),
+              Text(
+                _getLocationText(locationModel),
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -179,7 +167,10 @@ enum ItemCategory {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => Menu(itemCategory: this, items: items)),
+          builder: (context) => Menu(
+              itemCategory: this,
+              items: items,
+              isVeg: this == ItemCategory.kulukki)),
     );
   }
 }

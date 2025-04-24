@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:konkanspecials/model/location_model.dart/location_model.dart';
+import 'package:konkanspecials/model/location_model/location_model.dart';
 
 class LocationService extends ChangeNotifier {
-  // Singleton pattern
   static final LocationService _instance = LocationService._();
   static LocationService get instance => _instance;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konkanspecials/model/add_to_cart_model.dat/add_to_cart_model.dart';
+import 'package:konkanspecials/model/add_to_cart_model/add_to_cart_model.dart';
 import 'package:konkanspecials/model/items/item_data.dart';
 
 class ItemAddingViewModel extends ChangeNotifier {
@@ -36,14 +36,22 @@ class ItemAddingViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void decrementQuantity({required String itemId}) {
-    final index = items.indexWhere((element) => element.itemData.id == itemId);
-    final item = items[index];
-    final newQty = item.quantity - 1;
-    print('newQty: $newQty');
+void decrementQuantity({required String itemId}) {
+  final index = items.indexWhere((element) => element.itemData.id == itemId);
+  if (index == -1) return; // Item not found
+
+  final item = items[index];
+  final newQty = item.quantity - 1;
+  print('newQty: $newQty');
+
+  if (newQty <= 0) {
+    items.removeAt(index);
+  } else {
     items[index] = AddToCartModel(itemData: item.itemData, quantity: newQty);
-    notifyListeners();
   }
+
+  notifyListeners();
+}
 
   void incrementQuantity({required String itemId}) {
     print('incrementQuantity');

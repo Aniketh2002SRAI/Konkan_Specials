@@ -46,6 +46,9 @@ class Account extends StatelessWidget {
       case LoginType.signup:
         accountViewModel.setLoginType(LoginType.initial);
         break;
+      case LoginType.forgotPassword:
+        accountViewModel.setLoginType(LoginType.login);
+        break;
     }
   }
 
@@ -56,6 +59,7 @@ class Account extends StatelessWidget {
         return null;
       case LoginType.login:
       case LoginType.signup:
+      case LoginType.forgotPassword:
         return Icons.chevron_left;
       default:
         return null;
@@ -86,9 +90,12 @@ class Account extends StatelessWidget {
       case LoginType.initial:
         return InitialAccountLayout(accountViewModel: accountViewModel);
       case LoginType.login:
-        return LoginSignUpWidget(loginType: LoginType.login);
+      case LoginType.forgotPassword:
+        return LoginSignUpWidget(
+            loginType: LoginType.login, accountViewModel: accountViewModel);
       case LoginType.signup:
-        return LoginSignUpWidget(loginType: LoginType.signup);
+        return LoginSignUpWidget(
+            loginType: LoginType.signup, accountViewModel: accountViewModel);
       case LoginType.user:
         return UserWidget();
     }
@@ -147,4 +154,4 @@ class Account extends StatelessWidget {
   }
 }
 
-enum LoginType { initial, login, signup, user }
+enum LoginType { initial, login, signup, user, forgotPassword }

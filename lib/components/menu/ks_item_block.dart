@@ -9,31 +9,35 @@ import 'package:provider/provider.dart';
 
 class KsItemBlock extends StatelessWidget {
   final ItemData itemData;
-  const KsItemBlock({super.key, required this.itemData});
+  final bool isVeg; 
+  const KsItemBlock({super.key, required this.itemData, required this.isVeg});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 3,
-            spreadRadius: 1,
-            offset: Offset(0, 3),
-          )
-        ],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _descriptionWidget(),
-          Spacer(),
-          _itemPicAndAddButton(),
-        ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              blurRadius: 3,
+              spreadRadius: 1,
+              offset: Offset(0, 3),
+            )
+          ],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _descriptionWidget(isVeg: isVeg),
+            Spacer(),
+            _itemPicAndAddButton(),
+          ],
+        ),
       ),
     );
   }
@@ -100,11 +104,11 @@ class KsItemBlock extends StatelessWidget {
     );
   }
 
-  Widget _descriptionWidget() {
+  Widget _descriptionWidget({required bool isVeg}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _categoryDifferentiator(),
+        _categoryDifferentiator(isVeg: isVeg),
         _itemTitle(),
         _itemPrice(),
       ],
@@ -114,7 +118,7 @@ class KsItemBlock extends StatelessWidget {
   Widget _itemPrice() {
     return Padding(
       padding: EdgeInsets.only(
-          top: ScreenUtil().setHeight(5), left: ScreenUtil().setWidth(5)),
+          top: ScreenUtil().setHeight(5), left: ScreenUtil().setWidth(8)),
       child: Text('Rs.' + itemData.price.toString(),
           style: GoogleFonts.nunito(
             fontSize: 15,
@@ -137,22 +141,22 @@ class KsItemBlock extends StatelessWidget {
     );
   }
 
-  Widget _categoryDifferentiator() {
+  Widget _categoryDifferentiator({required bool isVeg}) {
     return Padding(
       padding: EdgeInsets.only(
-          left: ScreenUtil().setWidth(5), top: ScreenUtil().setHeight(10)),
+          left: ScreenUtil().setWidth(8), top: ScreenUtil().setHeight(10)),
       child: Container(
         height: ScreenUtil().setHeight(20),
         width: ScreenUtil().setWidth(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: Colors.red),
+          border: Border.all(color: isVeg ? Colors.green : Colors.red),
         ),
         child: Padding(
           padding: EdgeInsets.all(2.5),
           child: CircleAvatar(
             radius: 8,
-            backgroundColor: Colors.red,
+            backgroundColor: isVeg ? Colors.green : Colors.red,
           ),
         ),
       ),
