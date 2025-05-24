@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:konkanspecials/api/api.dart';
+import 'package:konkanspecials/components/home_page/carosuel_widget.dart';
 import 'package:konkanspecials/components/home_page/category_block.dart';
 import 'package:konkanspecials/components/home_page/description_widget.dart';
 import 'package:konkanspecials/components/uitilty/cart_description_navigation_widget.dart';
@@ -43,6 +44,7 @@ class _HomepageState extends State<Homepage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  CarosuelWidget(),
                   _categoryBlockWidget(),
                   DescriptionWidget(),
                 ],
@@ -103,15 +105,15 @@ class _HomepageState extends State<Homepage> {
   Widget _categoryBlockWidget() {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(10),
+        horizontal: ScreenUtil().setWidth(12),
       ),
       child: GridView.builder(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 10.h,
-          crossAxisSpacing: 10.w,
+          mainAxisSpacing: 18.h,
+          crossAxisSpacing: 18.h,
           childAspectRatio: 0.85,
         ),
         itemCount: ItemCategory.values.length,

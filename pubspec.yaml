@@ -43,6 +43,7 @@ dependencies:
   shimmer: ^3.0.0
   fluttertoast: ^8.2.12
   geolocator: ^13.0.2
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +71,7 @@ flutter:
   assets:
     - images/category_images/
     - images/background_images/
-  
+    - images/caraosel_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

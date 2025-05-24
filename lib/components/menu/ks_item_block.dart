@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class KsItemBlock extends StatelessWidget {
   final ItemData itemData;
-  final bool isVeg; 
+  final bool isVeg;
   const KsItemBlock({super.key, required this.itemData, required this.isVeg});
 
   @override
@@ -66,8 +66,6 @@ class KsItemBlock extends StatelessWidget {
               itemAddingViewModel.getItemQuantity(itemId: itemData.id);
 
           return ksOrderAddDecrementButton(
-            shouldShowAddIcon: itemAddingViewModel.checkIFItemOutOfStock(
-                itemId: itemData.id, quantity: quantity),
             showIcons: quantity > 0 ? true : false,
             shouldEnable: itemData.stock_quantity > 0,
             borderRadius: 10,

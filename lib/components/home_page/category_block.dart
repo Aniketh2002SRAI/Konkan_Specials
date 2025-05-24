@@ -20,30 +20,16 @@ class CategoryBlock extends StatelessWidget {
   Widget _card() {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: _cardItems(),
-      ),
+      child: _cardItems(),
     );
   }
 
   Widget _cardItems() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _descriptionWidget(),
-        SizedBox(height: 10),
+          SizedBox(height: 15),
         _imageWidget(),
       ],
     );
@@ -56,7 +42,7 @@ class CategoryBlock extends StatelessWidget {
         vertical: ScreenUtil().setHeight(5),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             itemCategory.emoji,
@@ -65,6 +51,7 @@ class CategoryBlock extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
+          SizedBox(width: 10),
           Text(
             itemCategory.name,
             style: GoogleFonts.shantellSans(
@@ -79,19 +66,23 @@ class CategoryBlock extends StatelessWidget {
 
   Widget _imageWidget() {
     return Expanded(
-      child: Container(
-        width: double.infinity,
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-          ),
-          child: Image.asset(
-            itemCategory.image,
-            fit: BoxFit.cover,
-          ),
+        child: Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage(itemCategory.image),
+          fit: BoxFit.cover,
         ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-    );
+    ));
   }
 }

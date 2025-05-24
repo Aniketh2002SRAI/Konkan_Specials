@@ -6,7 +6,7 @@ class ksOrderAddDecrementButton extends StatelessWidget {
   final double borderRadius;
   final bool showIcons;
   final bool shouldEnable;
-  final bool shouldShowAddIcon;
+
   final String text;
   final VoidCallback onTap;
   final VoidCallback addTap;
@@ -17,7 +17,6 @@ class ksOrderAddDecrementButton extends StatelessWidget {
       this.borderRadius = 0,
       required this.shouldEnable,
       required this.showIcons,
-      required this.shouldShowAddIcon,
       required this.text,
       required this.onTap,
       required this.addTap,
@@ -55,12 +54,10 @@ class ksOrderAddDecrementButton extends StatelessWidget {
                       fontWeight: FontWeight.w700)),
               showIcons
                   ? InkWell(
-                      onTap: shouldShowAddIcon ? addTap : () {},
+                      onTap: addTap,
                       child: Icon(
                         Icons.add_rounded,
-                        color: shouldShowAddIcon
-                            ? Colors.white
-                            : Colors.transparent,
+                        color: Colors.white,
                         size: 25,
                         weight: 700,
                       ),
